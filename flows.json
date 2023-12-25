@@ -2,7 +2,7 @@
     {
         "id": "7cbe116050851432",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Github Monitor",
         "disabled": false,
         "info": "",
         "env": []
@@ -101,5 +101,189 @@
                 "py": 0
             }
         }
+    },
+    {
+        "id": "f98fdb91a4cb2c44",
+        "type": "inject",
+        "z": "7cbe116050851432",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 80,
+        "wires": [
+            [
+                "e9770597e0c24e11"
+            ]
+        ]
+    },
+    {
+        "id": "e9770597e0c24e11",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Get env variables",
+        "func": "msg.payload = env.get(\"GIT_REPO_URL\") + \" \" + env.get(\"GIT_STATIC_CONTENT\")  + \" \" + env.get(\"GIT_BRANCH\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 80,
+        "wires": [
+            [
+                "2105a3b3b3c1923d"
+            ]
+        ]
+    },
+    {
+        "id": "2105a3b3b3c1923d",
+        "type": "exec",
+        "z": "7cbe116050851432",
+        "command": "/data/git_init.sh",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 740,
+        "y": 80,
+        "wires": [
+            [
+                "68cba41e6ff39280"
+            ],
+            [
+                "68cba41e6ff39280"
+            ],
+            [
+                "68cba41e6ff39280"
+            ]
+        ]
+    },
+    {
+        "id": "68cba41e6ff39280",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "0a67c5df72bfaa91",
+        "type": "http in",
+        "z": "7cbe116050851432",
+        "name": "/gitUpdate",
+        "url": "/gitUpdate",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "93deee5804d587a6"
+            ]
+        ]
+    },
+    {
+        "id": "93deee5804d587a6",
+        "type": "json",
+        "z": "7cbe116050851432",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 450,
+        "y": 180,
+        "wires": [
+            [
+                "16c77e0a7917bf97"
+            ]
+        ]
+    },
+    {
+        "id": "16c77e0a7917bf97",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "check for url",
+        "func": "if (msg.payload.repository.hasOwnProperty('clone_url'))\n{\n    if (msg.payload.repository.clone_url == env.get(\"GIT_REPO_URL\"))\n    {\n        return {topic:\"headers\",payload: env.get(\"GIT_BRANCH\")};\n    }\n}\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 180,
+        "wires": [
+            [
+                "96993c80c018f738"
+            ]
+        ]
+    },
+    {
+        "id": "96993c80c018f738",
+        "type": "exec",
+        "z": "7cbe116050851432",
+        "command": "git -C /data pull origin ",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 820,
+        "y": 180,
+        "wires": [
+            [
+                "cf7f9d1d2d2567e8"
+            ],
+            [
+                "cf7f9d1d2d2567e8"
+            ],
+            [
+                "cf7f9d1d2d2567e8"
+            ]
+        ]
+    },
+    {
+        "id": "cf7f9d1d2d2567e8",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 180,
+        "wires": []
     }
 ]
