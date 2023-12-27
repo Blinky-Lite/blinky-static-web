@@ -123,7 +123,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 310,
+        "x": 450,
         "y": 80,
         "wires": [
             [
@@ -142,7 +142,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 650,
         "y": 80,
         "wires": [
             [
@@ -162,7 +162,7 @@
         "winHide": false,
         "oldrc": false,
         "name": "",
-        "x": 740,
+        "x": 880,
         "y": 80,
         "wires": [
             [
@@ -188,7 +188,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1000,
+        "x": 1140,
         "y": 80,
         "wires": []
     },
@@ -201,7 +201,7 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 300,
+        "x": 440,
         "y": 180,
         "wires": [
             [
@@ -217,7 +217,7 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 450,
+        "x": 590,
         "y": 180,
         "wires": [
             [
@@ -230,13 +230,14 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "check for url",
-        "func": "if (msg.payload.repository.hasOwnProperty('clone_url'))\n{\n    if (msg.payload.repository.clone_url == env.get(\"GIT_REPO_URL\"))\n    {\n        return {topic:\"headers\",payload: env.get(\"GIT_BRANCH\")};\n    }\n}\nreturn null;\n",
+        "func": "if (msg.payload.repository.hasOwnProperty('clone_url'))\n{\n    if (msg.payload.repository.clone_url == env.get(\"GIT_REPO_URL\"))\n    {\n        node.warn('Updating: ' + msg.payload.commits[0].message);\n        return {topic:\"headers\",payload: env.get(\"GIT_BRANCH\")};\n    }\n}\nreturn null;\n",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 750,
         "y": 180,
         "wires": [
             [
@@ -256,7 +257,7 @@
         "winHide": false,
         "oldrc": false,
         "name": "",
-        "x": 820,
+        "x": 960,
         "y": 180,
         "wires": [
             [
@@ -282,7 +283,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1060,
+        "x": 1200,
         "y": 180,
         "wires": []
     }
